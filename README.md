@@ -57,3 +57,6 @@ Consider citing us if you find our paper useful in your research :)
   year={2023}
 }
 ```
+
+## Contact
+Please contact me via 2minkyulee@gmail.com for any inquiries.
