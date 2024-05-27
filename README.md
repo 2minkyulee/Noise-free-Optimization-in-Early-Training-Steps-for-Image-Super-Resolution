@@ -92,8 +92,8 @@ You may modify the line for noise_scheduling if needed, but we did not observe s
 
 #### Example script for training
 ```
-CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 train.py --wandb_name ECOO --config_template _largerbatch_EDSR_S_x2_ecoo2_mixup_lrx2_configs  # reproducing ours
-CUDA_VISIBLE_DEVICES=1 /opt/conda/bin/python3 train.py --wandb_name ECOO --config_template _largerbatch_EDSR_x2_default_configs             # reproducing baseline
+CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 train.py --wandb_name ECOO --config_template _largerbatch_EDSR_x2_ecoo2_mixup_lrx2_configs  # reproducing ours
+CUDA_VISIBLE_DEVICES=1 /opt/conda/bin/python3 train.py --wandb_name ECOO --config_template _largerbatch_EDSR_x2_default_configs           # reproducing baseline
 ```
 
 #### Example script for training with DP
