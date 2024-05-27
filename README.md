@@ -12,11 +12,13 @@ Recent deep-learning-based single image super-resolution (SISR) methods have sho
 ## Notes
 
 :star:**Our implementation is based on DP (DataParallel).** \
-DP is reported to be faster than DDP without NVlinks. (https://huggingface.co/docs/transformers/v4.20.1/en/perf_train_gpu_many)
+DP may be faster than DDP without NVlinks. (https://huggingface.co/docs/transformers/v4.20.1/en/perf_train_gpu_many)
 
-:star:**Weights are compatible with official repositories of each, not BasicSR.** \
-EDSR: https://github.com/sanghyun-son/EDSR-PyTorch \
-RCAN: https://github.com/yulunzhang/RCAN
+:star:**We use PIL to read images.** \
+Consider using PIL-SIMD for faster I/O. \
+Please note that our implementation takes images in the range of 0-1. \
+Ensure to scale them accordingly when adapting to other frameworks.
+
 
 :exclamation: **Notes on Downsampling with MATLAB** \
 In official repositories, there is variation in how scripts generate bicubic downsampled images: some utilize the **im2double** function to increase precision, while others do not. Given that SR methods may be sensitive to such differences, we have manually downsampled all train/test images **_without_** using the **im2double** function, which is the de facto configuration. Both our models and the baseline models have been trained and tested using this consistently downsampled dataset.
@@ -108,7 +110,7 @@ CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 train.py --wandb_name ECOO --confi
 
 #### Example script for testing x3 SR with RCAN. 
 ```
-CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 test_official.py \
+CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 test.py \
 --project_name RCAN_x3  \
 --generator RCAN@RCAN_x3  \
 --test_scale_factor 3  \
@@ -120,7 +122,7 @@ CUDA_VISIBLE_DEVICES=0 /opt/conda/bin/python3 test_official.py \
 ```
 #### Example script for testing x2 SR with EDSR. 
 ```
-CUDA_VISIBLE_DEVICES=1 /opt/conda/bin/python3 test_official.py \
+CUDA_VISIBLE_DEVICES=1 /opt/conda/bin/python3 test.py \
 --project_name EDSR_x2  \
 --generator EDSR@EDSR_x2  \
 --test_scale_factor 2  \
