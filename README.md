@@ -8,6 +8,40 @@ Official Repository for AAAI2024 Noise-free Optimization in Early Training Steps
 ## Abstract
 Recent deep-learning-based single image super-resolution (SISR) methods have shown impressive performance whereas typical methods train their networks by minimizing the pixel-wise distance with respect to a given high-resolution (HR) image. However, despite the basic training scheme being the predominant choice, its use in the context of ill-posed inverse problems has not been thoroughly investigated. In this work, we aim to provide a better comprehension of the underlying constituent by decomposing target HR images into two subcomponents: (1) the optimal centroid which is the expectation over multiple potential HR images, and (2) the inherent noise defined as the residual between the HR image and the centroid. Our findings show that the current training scheme cannot capture the ill-posed nature of SISR and becomes vulnerable to the inherent noise term, especially during early training steps. To tackle this issue, we propose a novel optimization method that can effectively remove the inherent noise term in the early steps of vanilla training by estimating the optimal centroid and directly optimizing toward the estimation. Experimental results show that the proposed method can effectively enhance the stability of vanilla training, leading to overall performance gain.
 
+
+
+## Simple Code Snippet
+
+Our method can be easily adapted to existing frameworks. We provide a simple code snippet so that users can quickly integrate this method without having to read and modify the entire codebase.
+```
+# sr_pretrained := image obtained by SR_pretrained(lr_original)
+# lr_pretrained := MATLAB bicubic downsampled version of sr_pretrained
+
+for lr_pretrained, sr_pretrained, lr_original, gt_original in dataloader:
+    
+    if noise_free_training:
+        a = current_iter / total_iter  # modify noise scheduling if required.
+        lr = (1-a)*lr_pretrained + a*lr_original
+        gt = (1-a)*sr_pretrained + a*gt_original
+    else: # vanilla training
+        lr = lr_original
+        gt = gt_original
+    
+    # train
+    optim.zero_grad()
+    out = sr_net(lr)
+    loss = mse(out, gt)
+    loss.backward()
+    optim.step()
+```
+
+Note that in formal settings, lr_pretrained is downsampled from sr_pretrained with MATLAB downsampling functions (not pytorch / PIL / cv2).
+Thus, lr_pretrained, sr_pretrained should be preprocessed before training.
+However, if it is a simple toy project where you don't require 1) strict computational efficiency and 2) fair comparison with previously released works/weights, you can simply do everything on flight.
+
+You may modify the line for noise_scheduling if needed, but we did not observe significant difference.
+
+
 ---
 ## Notes
 
@@ -58,37 +92,6 @@ Download pretrained weights of reproduced baselines and ours [here](https://driv
 
 ---
 ## Basic Usage
-
-#### Simple Code Snippet
-
-Our method can be easily adapted to existing frameworks. We provide a simple code snippet so that users can quickly integrate this method without having to read and modify the entire codebase.
-```
-# sr_pretrained := image obtained by SR_pretrained(lr_original)
-# lr_pretrained := MATLAB bicubic downsampled version of sr_pretrained
-
-for lr_pretrained, sr_pretrained, lr_original, gt_original in dataloader:
-    
-    if noise_free_training:
-        a = current_iter / total_iter  # modify noise scheduling if required.
-        lr = (1-a)*lr_pretrained + a*lr_original
-        gt = (1-a)*sr_pretrained + a*gt_original
-    else: # vanilla training
-        lr = lr_original
-        gt = gt_original
-    
-    # train
-    optim.zero_grad()
-    out = sr_net(lr)
-    loss = mse(out, gt)
-    loss.backward()
-    optim.step()
-```
-
-Note that in formal settings, lr_pretrained is downsampled from sr_pretrained with MATLAB downsampling functions (not pytorch / PIL / cv2).
-Thus, lr_pretrained, sr_pretrained should be preprocessed before training.
-However, if it is a simple toy project where you don't require 1) strict computational efficiency and 2) fair comparison with previously released works/weights, you can simply do everything on flight.
-
-You may modify the line for noise_scheduling if needed, but we did not observe significant difference.
 
 #### Example script for training
 ```
