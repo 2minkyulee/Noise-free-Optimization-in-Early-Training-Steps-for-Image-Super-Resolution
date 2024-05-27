@@ -1,5 +1,7 @@
 # [AAAI2024] Noise-free Optimization in Early Training Steps for Image Super-Resolution
-Official Repository for AAAI2024 Noise-free Optimization in Early Training Steps for Image Super-Resolution (ECO). \
+Official Repository for AAAI2024 Noise-free Optimization in Early Training Steps for Image Super-Resolution (ECO). 
+
+The Arxiv version contains additional supplementary material.\
 [ArXiv] https://arxiv.org/abs/2312.17526 \
 [AAAI] https://doi.org/10.1609/aaai.v38i4.28073
 
