@@ -38,10 +38,16 @@ for lr_pretrained, sr_pretrained, lr_original, gt_original in dataloader:
 ```
 
 Note that in formal settings, lr_pretrained is downsampled from sr_pretrained with MATLAB downsampling functions (not pytorch / PIL / cv2).
-Thus, lr_pretrained, sr_pretrained should be preprocessed before training.
+Thus, lr_pretrained, sr_pretrained should be preprocessed before training. 
 However, if it is a simple toy project where you don't require 1) strict computational efficiency and 2) fair comparison with previously released works/weights, you can simply do everything on flight.
 
 You may modify the line for noise_scheduling if needed, but we did not observe significant difference.
+
+_**Important**_:exclamation:
+When implementing this on-flight, the pretrained SR network should be independent of the in-training network. Else it might collapse.
+Additionally, using different resizing functions for training and testing may lead to performance drop. 
+Note that despite using the (almost-)identically named _bicubic resize_ function, output values may differ based on the library.
+(Refer to https://github.com/2minkyulee/Noise-free-Optimization-in-Early-Training-Steps-for-Image-Super-Resolution/issues/3#issuecomment-2149164158)
 
 
 ---
